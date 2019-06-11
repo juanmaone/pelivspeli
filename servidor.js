@@ -21,7 +21,6 @@ app.get('/', function(req, res) {
 app.get('/competencias/:id', controladorAdmin.competenciaAEditar);
 app.post('/competencias', controladorAdmin.nuevaCompetencia);
 app.delete('/competencias/:id/votos', controladorAdmin.eliminarVotos);
-
 app.put('/competencias/:id', controladorAdmin.updateCompetencia);
 app.delete('/competencias/:id', controladorAdmin.deleteCompetencia);
 app.get('/generos', controladorAdmin.cargarGeneros);
