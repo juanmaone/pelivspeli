@@ -1,0 +1,24 @@
+{
+  "name": "pelivspeli",
+  "version": "1.0.0",
+  "description": "peli vs peli acamica jmf",
+  "main": "cliente/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "acamica",
+    "peli",
+    "vs",
+    "peli"
+  ],
+  "author": "JUAN MARTIN FUNES",
+  "license": "ISC",
+  "dependencies": {
+    "body-parse": "^0.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.17.1",
+    "node": "^12.2.0"
+  }
+}
