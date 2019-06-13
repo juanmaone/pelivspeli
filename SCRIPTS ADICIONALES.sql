@@ -11,13 +11,19 @@ insert into competencias (nombre) values('Cual es la mejor pelicula con Tom Crui
 (' Que pelicula vendio mas entradas?'),('Cual es la pelicula mas corta?');
 
 
+
 create table voto(
 id integer auto_increment not null,
 pelicula_id integer  not null,
 competencia_id integer not null,
-primary key(id)
-);
+enabled bool default true,
+primary key(id),
+foreign key (competencia_id) references competencias(id)
+)
 
 
-alter table competencias  add column genero_id int, add column director_id int, add column actor_id int,
+alter table competencias  add column genero_id int, 
+alter table competencias add column director_id int, 
+alter table competencias add column actor_id int,
 alter table competencias  add column enabled bool default true;
+alter table voto add column enabled bool default true;

@@ -11,11 +11,12 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
+
 app.get('/', function(req, res) {
-    //res.sendFile(path.join('./cliente/html/index.html'));
-    res.sendFile('../cliente/html/index.html');
-    console.log("DIR");
-    console.log(__dirname);
+    res.sendFile(path.join('./cliente/html/index.html'));
+    /* res.sendFile('../cliente/html/index.html');
+     console.log("DIR");
+     console.log(__dirname);*/
 });
 
 app.get('/competencias/:id', controladorAdmin.competenciaAEditar);

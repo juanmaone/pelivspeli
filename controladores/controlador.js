@@ -26,8 +26,8 @@ function obtenerResultados(req, res) {
         }
         //  sqlPeliculasRnd = 'select * from  pelicula   order by rand() limit 2;';
         // sqlPeliculasRes = 'select * from  pelicula p, voto v where p.id = v.pelicula_id and v.competencia_id=' + idCompetencia + ' limit 3;';
-        sqlPeliculasRes = 'select *,(select count(pelicula_id) from voto vot where vot.pelicula_id=p.id and competencia_id=' + idCompetencia + '  )as votos '
-        sqlPeliculasRes += ' from  pelicula p, voto v where p.id = v.pelicula_id and v.competencia_id=' + idCompetencia + ' order by votos DESC limit 3';
+        sqlPeliculasRes = 'select distinct *,(select count(pelicula_id) from voto vot where vot.pelicula_id=p.id and vot.enabled=1 and competencia_id=' + idCompetencia + '  )as votos '
+        sqlPeliculasRes += ' from  pelicula p, voto v where p.id = v.pelicula_id and v.competencia_id=' + idCompetencia + ' group by titulo,votos order by votos DESC limit 3';
         console.log(sqlPeliculasRes);
         conexion.query(sqlPeliculasRes, function(error, resultPeliculas) {
             if (error) {
@@ -48,7 +48,7 @@ function obtenerResultados(req, res) {
 
 function buscarOpciones(req, res) {
     var idCompetencia = req.params.id;
-    var sql = 'select * from  competencias where  id=' + idCompetencia + ';';
+    var sql = 'select distinct * from  competencias where  id=' + idCompetencia + ';';
     conexion.query(sql, function(error, resultCompetencia) {
         if (error) {
             console.error('NO SE PUEDE CONECTAR A LA BASE DE DATOS eRR003' + error.message);
@@ -58,18 +58,20 @@ function buscarOpciones(req, res) {
         var director_id = resultCompetencia[0].director_id;
         var actor_id = resultCompetencia[0].actor_id;
         var genero_id = resultCompetencia[0].genero_id;
-        sqlPeliculasRnd = 'select * from  pelicula  where (true) '
+        sqlPeliculasRnd = 'select * from  pelicula p  where (true) '
         if (director_id != 0) {
-            sqlPeliculasRnd += `and director_id=` + director_id + ` `
+            sqlPeliculasRnd += `and p.director=(select d.nombre from director d where d.id=` + director_id + `) `
         }
         if (genero_id != 0) {
             sqlPeliculasRnd += ` and genero_id=` + genero_id + ` `
         }
         if (actor_id != 0) {
-            sqlPeliculasRnd += ` and actor_id=` + actor_id + ` `
+            sqlPeliculasRnd += ` and p.id in (select ap.pelicula_id from actor_pelicula ap, actor a where
+                                 a.id=ap.actor_id and ap.pelicula_id=p.id and a.id=` + actor_id + ` )`; //peliculas con el actor de la competencia
         }
 
         sqlPeliculasRnd += ' order by rand() limit 2;';
+        console.log('buscar pelis comp', sqlPeliculasRnd)
 
         conexion.query(sqlPeliculasRnd, function(error, resultPeliculas) {
             if (error) {

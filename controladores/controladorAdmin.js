@@ -34,8 +34,7 @@ function eliminarVotos(req, res) {
     console.log(req.body)
     console.log(idCompetencia)
 
-    var sqlDelete = `   
-    delete from voto where competencia_id = ` + idCompetencia + `; `;
+    var sqlDelete = ` delete from voto where competencia_id = ` + idCompetencia + `; `;
     conexion.query(sqlDelete, function(error, resultDelete) {
         if (error) {
             console.error('NO SE PUEDE CONECTAR A LA BASE DE DATOS eRR007' + error.message, sqlDelete);
@@ -146,13 +145,13 @@ function updateCompetencia(req, res) {
 function deleteCompetencia(req, res) {
     var idCompetencia = req.params.id;
 
-    var sql1 = `update voto set competencia_id=0 where competencia_id=` + idCompetencia + `; `
+    var sql1 = `update voto set enabled=0 where competencia_id=` + idCompetencia + `; `
     conexion.beginTransaction(function(error) {
         if (error) { throw err; }
         conexion.query(sql1, function(error, result) {
             if (error) {
                 conexion.rollback(function() {
-                    console.error('NO SE PUEDE CONECTAR A LA BASE DE DATOS eRR014 ' + error.message, sql);
+                    console.error('NO SE PUEDE CONECTAR A LA BASE DE DATOS eRR014 ' + error.message, sql1);
                     return res.status(402).send('Error al conectar a la base de datos');
                 });
             }
